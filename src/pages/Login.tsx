@@ -12,7 +12,7 @@ import {
 function Login() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        username: '',
+        email: '',
         password: '',
     });
 
@@ -21,15 +21,12 @@ function Login() {
         
         // TODO: Implement login logic
         console.log('Login attempt:', formData);
-        navigate('/todo');
+        navigate('/todos');
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     return (
@@ -58,12 +55,13 @@ function Login() {
                             margin="normal"
                             required
                             fullWidth
-                            id="username"
-                            label="username"
-                            name="username"
-                            autoComplete="username"
+                            id="email"
+                            label="email"
+                            name="email"
+                            autoComplete="email"
+                            type="email"
                             autoFocus
-                            value={formData.username}
+                            value={formData.email}
                             onChange={handleChange}
                         />
                         <TextField
