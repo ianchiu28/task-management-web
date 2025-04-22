@@ -7,7 +7,10 @@ import {
     Button,
     Typography,
     Paper,
+    CircularProgress,
+    Alert,
 } from '@mui/material';
+import { register } from '../services/api';
 
 interface FormErrors {
     email?: string;
@@ -26,6 +29,9 @@ function Register() {
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [apiError, setApiError] = useState<string | null>(null);
+
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,13 +69,21 @@ function Register() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setApiError(null);
 
         if (validateForm()) {
-            // TODO: Implement register logic
-            console.log('Register attempt:', formData);
-            navigate('/login');
+            setIsLoading(true);
+            try {
+                const { email, username, password } = formData;
+                await register({ email, username, password });
+                navigate('/login');
+            } catch (error) {
+                setApiError(error instanceof Error ? error.message : 'Registration failed');
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -93,10 +107,10 @@ function Register() {
         <Container component="main" maxWidth="xs">
             <Box
                 sx={{
-                marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
                 }}
             >
                 <Paper
@@ -110,6 +124,11 @@ function Register() {
                     }}
                 >
                     <Typography component="h1" variant="h5">Register</Typography>
+                    {apiError && (
+                        <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
+                            {apiError}
+                        </Alert>
+                    )}
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -125,6 +144,7 @@ function Register() {
                             onChange={handleChange}
                             error={!!errors.email}
                             helperText={errors.email}
+                            disabled={isLoading}
                         />
                         <TextField
                             margin="normal"
@@ -134,11 +154,11 @@ function Register() {
                             label="username"
                             name="username"
                             autoComplete="username"
-                            autoFocus
                             value={formData.username}
                             onChange={handleChange}
                             error={!!errors.username}
                             helperText={errors.username}
+                            disabled={isLoading}
                         />
                         <TextField
                             margin="normal"
@@ -152,6 +172,7 @@ function Register() {
                             onChange={handleChange}
                             error={!!errors.password}
                             helperText={errors.password}
+                            disabled={isLoading}
                         />
                         <TextField
                             margin="normal"
@@ -165,14 +186,16 @@ function Register() {
                             onChange={handleChange}
                             error={!!errors.confirmPassword}
                             helperText={errors.confirmPassword}
+                            disabled={isLoading}
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={isLoading}
                         >
-                            Register
+                            {isLoading ? <CircularProgress size={24} /> : 'Register'}
                         </Button>
                         <Button
                             component={Link}
@@ -180,6 +203,7 @@ function Register() {
                             fullWidth
                             variant="text"
                             sx={{ mt: 1 }}
+                            disabled={isLoading}
                         >
                             Already have an account? Login
                         </Button>
