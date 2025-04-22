@@ -7,7 +7,10 @@ import {
     Button,
     Typography,
     Paper,
-} from '@mui/material'
+    CircularProgress,
+    Alert,
+} from '@mui/material';
+import { login } from '../services/api';
 
 function Login() {
     const navigate = useNavigate();
@@ -15,13 +18,22 @@ function Login() {
         email: '',
         password: '',
     });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        // TODO: Implement login logic
-        console.log('Login attempt:', formData);
-        navigate('/todos');
+        setError(null);
+        setIsLoading(true);
+
+        try {
+            await login(formData);
+            navigate('/todos');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Login failed');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +62,9 @@ function Login() {
                     }}
                 >
                     <Typography component="h1" variant="h5">Login</Typography>
+                    {error && (
+                        <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{error}</Alert>
+                    )}
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -63,6 +78,7 @@ function Login() {
                             autoFocus
                             value={formData.email}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <TextField
                             margin="normal"
@@ -75,14 +91,16 @@ function Login() {
                             autoComplete="current-password"
                             value={formData.password}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={isLoading}
                         >
-                            Login
+                            {isLoading ? <CircularProgress size={24} /> : 'Login'}
                         </Button>
                         <Button
                             component={Link}
@@ -90,6 +108,7 @@ function Login() {
                             fullWidth
                             variant="text"
                             sx={{ mt: 1 }}
+                            disabled={isLoading}
                         >
                             Don't have an account? Register
                         </Button>
