@@ -89,17 +89,11 @@ function Register() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
 
         // Clear error when input changes
         if (errors[name as keyof FormErrors]) {
-            setErrors((prev) => ({
-                ...prev,
-                [name]: undefined,
-            }));
+            setErrors((prev) => ({ ...prev, [name]: undefined }));
         }
     };
 
@@ -125,9 +119,7 @@ function Register() {
                 >
                     <Typography component="h1" variant="h5">Register</Typography>
                     {apiError && (
-                        <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
-                            {apiError}
-                        </Alert>
+                        <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{apiError}</Alert>
                     )}
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
