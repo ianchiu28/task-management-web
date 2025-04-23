@@ -1,3 +1,5 @@
+import { getToken } from './auth';
+
 interface RegisterData {
     email: string;
     username: string;
@@ -11,15 +13,30 @@ interface LoginData {
 
 interface ApiResponse {
     message: string;
-    data: object;
+    data: {
+        accessToken?: string;        
+    };
 }
+
+const getHeaders = (includeAuth = false) => {
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+    };
+
+    if (includeAuth) {
+        const token = getToken();
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+    }
+
+    return headers;
+};
 
 export const register = async (data: RegisterData): Promise<ApiResponse> => {
     const response = await fetch('http://localhost:4010/users', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
 
@@ -34,9 +51,7 @@ export const register = async (data: RegisterData): Promise<ApiResponse> => {
 export const login = async (data: LoginData): Promise<ApiResponse> => {
     const response = await fetch('http://localhost:4010/users/login', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
 
