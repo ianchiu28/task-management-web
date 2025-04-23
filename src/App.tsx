@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Box } from '@mui/material';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TodoList from './pages/TodoList';
@@ -15,6 +14,10 @@ const theme = createTheme({
     },
     secondary: {
       main: '#dc004e',
+    },
+    background: {
+      default: '#becbd3',
+      paper: '#dcdddf'
     },
   },
 });
@@ -41,23 +44,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: '#dcdddf',
-          overflow: 'auto',
-        }}
-      >
-        <BrowserRouter>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
-        </BrowserRouter>
-      </Box>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
