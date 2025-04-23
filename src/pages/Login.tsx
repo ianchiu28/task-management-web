@@ -11,9 +11,11 @@ import {
     Alert,
 } from '@mui/material';
 import { login } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
     const navigate = useNavigate();
+    const { login: authLogin } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -27,8 +29,13 @@ function Login() {
         setIsLoading(true);
 
         try {
-            await login(formData);
-            navigate('/todos');
+            const response = await login(formData);
+            if (response.data.accessToken) {
+                authLogin(response.data.accessToken);
+                navigate('/todos', { replace: true });
+            } else {
+                throw new Error('No token received');
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Login failed');
         } finally {
