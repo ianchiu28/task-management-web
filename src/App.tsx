@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TodoList from './pages/TodoList';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Create a theme instance.
 const theme = createTheme({
@@ -18,10 +19,25 @@ const theme = createTheme({
   },
 });
 
-function App() {
-  // TODO: Implement authentication
-  const isAuthenticated = true;
+const AppRoutes = () => {
+  const { isAuthenticated } = useAuth();
 
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/todos"
+        element={
+          isAuthenticated ? <TodoList /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+    </Routes>
+  );
+};
+
+function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -37,17 +53,9 @@ function App() {
         }}
       >
         <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/todos"
-              element={
-                isAuthenticated ? <TodoList /> : <Navigate to="/login" replace />
-              }
-            />
-            <Route path="/" element={<Navigate to="/login" replace />} />
-          </Routes>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
         </BrowserRouter>
       </Box>
     </ThemeProvider>
