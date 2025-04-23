@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-    Container,
-    Box,
     TextField,
     Button,
     Typography,
-    Paper,
     CircularProgress,
     Alert,
+    Box,
 } from '@mui/material';
 import { login } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
+import { FormContainer } from '../components/forms/FormContainer';
 
 function Login() {
     const navigate = useNavigate();
@@ -49,80 +48,60 @@ function Login() {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Paper
-                    elevation={3}
-                    sx={{
-                        padding: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: '100%',
-                    }}
+        <FormContainer>
+            <Typography component="h1" variant="h5">Login</Typography>
+            {error && (
+                <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{error}</Alert>
+            )}
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="email"
+                    name="email"
+                    autoComplete="email"
+                    type="email"
+                    autoFocus
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={isLoading}
                 >
-                    <Typography component="h1" variant="h5">Login</Typography>
-                    {error && (
-                        <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{error}</Alert>
-                    )}
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="email"
-                            name="email"
-                            autoComplete="email"
-                            type="email"
-                            autoFocus
-                            value={formData.email}
-                            onChange={handleChange}
-                            disabled={isLoading}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            disabled={isLoading}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? <CircularProgress size={24} /> : 'Login'}
-                        </Button>
-                        <Button
-                            component={Link}
-                            to="/register"
-                            fullWidth
-                            variant="text"
-                            sx={{ mt: 1 }}
-                            disabled={isLoading}
-                        >
-                            Don't have an account? Register
-                        </Button>
-                    </Box>
-                </Paper>
+                    {isLoading ? <CircularProgress size={24} /> : 'Login'}
+                </Button>
+                <Button
+                    component={Link}
+                    to="/register"
+                    fullWidth
+                    variant="text"
+                    sx={{ mt: 1 }}
+                    disabled={isLoading}
+                >
+                    Don't have an account? Register
+                </Button>
             </Box>
-        </Container>
+        </FormContainer>
     );
 }
 

@@ -11,6 +11,7 @@ import {
     Alert,
 } from '@mui/material';
 import { register } from '../services/api';
+import { FormContainer } from '../components/forms/FormContainer';
 
 interface FormErrors {
     email?: string;
@@ -98,111 +99,91 @@ function Register() {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Paper
-                    elevation={3}
-                    sx={{
-                        padding: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: '100%',
-                    }}
+        <FormContainer>
+            <Typography component="h1" variant="h5">Register</Typography>
+            {apiError && (
+                <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{apiError}</Alert>
+            )}
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="email"
+                    name="email"
+                    autoComplete="email"
+                    type="email"
+                    autoFocus
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    disabled={isLoading}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="username"
+                    name="username"
+                    autoComplete="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    error={!!errors.username}
+                    helperText={errors.username}
+                    disabled={isLoading}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="password"
+                    type="password"
+                    id="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                    disabled={isLoading}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="confirmPassword"
+                    label="confirmPassword"
+                    type="password"
+                    id="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    error={!!errors.confirmPassword}
+                    helperText={errors.confirmPassword}
+                    disabled={isLoading}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={isLoading}
                 >
-                    <Typography component="h1" variant="h5">Register</Typography>
-                    {apiError && (
-                        <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{apiError}</Alert>
-                    )}
-                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="email"
-                            name="email"
-                            autoComplete="email"
-                            type="email"
-                            autoFocus
-                            value={formData.email}
-                            onChange={handleChange}
-                            error={!!errors.email}
-                            helperText={errors.email}
-                            disabled={isLoading}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="username"
-                            name="username"
-                            autoComplete="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            error={!!errors.username}
-                            helperText={errors.username}
-                            disabled={isLoading}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="password"
-                            type="password"
-                            id="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            error={!!errors.password}
-                            helperText={errors.password}
-                            disabled={isLoading}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="confirmPassword"
-                            label="confirmPassword"
-                            type="password"
-                            id="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            error={!!errors.confirmPassword}
-                            helperText={errors.confirmPassword}
-                            disabled={isLoading}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? <CircularProgress size={24} /> : 'Register'}
-                        </Button>
-                        <Button
-                            component={Link}
-                            to="/login"
-                            fullWidth
-                            variant="text"
-                            sx={{ mt: 1 }}
-                            disabled={isLoading}
-                        >
-                            Already have an account? Login
-                        </Button>
-                    </Box>
-                </Paper>
+                    {isLoading ? <CircularProgress size={24} /> : 'Register'}
+                </Button>
+                <Button
+                    component={Link}
+                    to="/login"
+                    fullWidth
+                    variant="text"
+                    sx={{ mt: 1 }}
+                    disabled={isLoading}
+                >
+                    Already have an account? Login
+                </Button>
             </Box>
-        </Container>
+        </FormContainer>
     );
 }
 
