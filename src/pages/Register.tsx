@@ -1,18 +1,14 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import {
-    Box,
-    Button,
-    Typography,
-    CircularProgress,
-    Alert,
-} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Alert } from '@mui/material';
 import { register } from '../services/api';
 import { FormContainer } from '../components/forms/FormContainer';
 import { EmailField } from '../components/forms/EmailField';
 import { UsernameField } from '../components/forms/UsernameField';
 import { PasswordField } from '../components/forms/PasswordField';
 import { ConfirmPasswordField } from '../components/forms/ConfirmPasswordField';
+import { SubmitButton } from '../components/forms/SubmitButton';
+import { NavButton } from '../components/forms/NavButton';
 
 interface FormErrors {
     email?: string;
@@ -131,25 +127,14 @@ function Register() {
                     error={errors.confirmPassword}
                     disabled={isLoading}
                 />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    disabled={isLoading}
-                >
-                    {isLoading ? <CircularProgress size={24} /> : 'Register'}
-                </Button>
-                <Button
-                    component={Link}
+                <SubmitButton
+                    isLoading={isLoading}
+                    text="Register"
+                />
+                <NavButton
                     to="/login"
-                    fullWidth
-                    variant="text"
-                    sx={{ mt: 1 }}
-                    disabled={isLoading}
-                >
-                    Already have an account? Login
-                </Button>
+                    text="Already have an account? Login"
+                />
             </Box>
         </FormContainer>
     );

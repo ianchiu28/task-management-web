@@ -1,18 +1,13 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import {
-    TextField,
-    Button,
-    Typography,
-    CircularProgress,
-    Alert,
-    Box,
-} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Typography, Alert, Box } from '@mui/material';
 import { login } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 import { FormContainer } from '../components/forms/FormContainer';
 import { EmailField } from '../components/forms/EmailField';
 import { PasswordField } from '../components/forms/PasswordField';
+import { SubmitButton } from '../components/forms/SubmitButton';
+import { NavButton } from '../components/forms/NavButton';
 
 function Login() {
     const navigate = useNavigate();
@@ -67,25 +62,14 @@ function Login() {
                     onChange={handleChange}
                     disabled={isLoading}
                 />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    disabled={isLoading}
-                >
-                    {isLoading ? <CircularProgress size={24} /> : 'Login'}
-                </Button>
-                <Button
-                    component={Link}
+                <SubmitButton
+                    isLoading={isLoading}
+                    text="Login"
+                />
+                <NavButton
                     to="/register"
-                    fullWidth
-                    variant="text"
-                    sx={{ mt: 1 }}
-                    disabled={isLoading}
-                >
-                    Don't have an account? Register
-                </Button>
+                    text="Don't have an account? Register"
+                />
             </Box>
         </FormContainer>
     );
