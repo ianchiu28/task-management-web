@@ -11,7 +11,7 @@ import {
     Alert,
 } from '@mui/material';
 import { login } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 function Login() {
     const navigate = useNavigate();
