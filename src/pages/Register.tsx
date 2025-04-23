@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-    Container,
     Box,
-    TextField,
     Button,
     Typography,
-    Paper,
     CircularProgress,
     Alert,
 } from '@mui/material';
 import { register } from '../services/api';
 import { FormContainer } from '../components/forms/FormContainer';
+import { EmailField } from '../components/forms/EmailField';
+import { UsernameField } from '../components/forms/UsernameField';
+import { PasswordField } from '../components/forms/PasswordField';
+import { ConfirmPasswordField } from '../components/forms/ConfirmPasswordField';
 
 interface FormErrors {
     email?: string;
@@ -104,63 +105,30 @@ function Register() {
             {apiError && (
                 <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{apiError}</Alert>
             )}
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="email"
-                    name="email"
-                    autoComplete="email"
-                    type="email"
-                    autoFocus
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
+                <EmailField
                     value={formData.email}
                     onChange={handleChange}
-                    error={!!errors.email}
-                    helperText={errors.email}
+                    error={errors.email}
                     disabled={isLoading}
+                    autoFocus
                 />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="username"
-                    name="username"
-                    autoComplete="username"
+                <UsernameField
                     value={formData.username}
                     onChange={handleChange}
-                    error={!!errors.username}
-                    helperText={errors.username}
+                    error={errors.username}
                     disabled={isLoading}
                 />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="password"
-                    type="password"
-                    id="password"
+                <PasswordField
                     value={formData.password}
                     onChange={handleChange}
-                    error={!!errors.password}
-                    helperText={errors.password}
+                    error={errors.password}
                     disabled={isLoading}
                 />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="confirmPassword"
-                    label="confirmPassword"
-                    type="password"
-                    id="confirmPassword"
+                <ConfirmPasswordField
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword}
+                    error={errors.confirmPassword}
                     disabled={isLoading}
                 />
                 <Button

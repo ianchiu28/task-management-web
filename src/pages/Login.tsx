@@ -11,6 +11,8 @@ import {
 import { login } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 import { FormContainer } from '../components/forms/FormContainer';
+import { EmailField } from '../components/forms/EmailField';
+import { PasswordField } from '../components/forms/PasswordField';
 
 function Login() {
     const navigate = useNavigate();
@@ -54,29 +56,13 @@ function Login() {
                 <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{error}</Alert>
             )}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="email"
-                    name="email"
-                    autoComplete="email"
-                    type="email"
-                    autoFocus
+                <EmailField
                     value={formData.email}
                     onChange={handleChange}
                     disabled={isLoading}
+                    autoFocus
                 />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
+                <PasswordField
                     value={formData.password}
                     onChange={handleChange}
                     disabled={isLoading}
