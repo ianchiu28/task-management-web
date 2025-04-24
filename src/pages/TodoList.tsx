@@ -12,47 +12,52 @@ import {
     Paper,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getTasks, Task } from '../services/api/task';
+import { getTasks, createTask, Task, deleteTask } from '../services/api/task';
 
 function TodoList() {
     const [todos, setTodos] = useState<Task[]>([]);
     const [newTodo, setNewTodo] = useState('');
 
-    useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await getTasks();
-                setTodos(response.data.tasks);
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        };
-
-        fetchTasks();
-    }, []);
-
-    const handleAddTodo = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (newTodo.trim()) {
-            setTodos([
-                ...todos,
-                { 
-                    uuid: Date.now().toString(),
-                    title: newTodo,
-                    description: '',
-                    status: 'pending',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-            ]);
-            setNewTodo('');
+    const fetchTasks = async () => {
+        try {
+            const response = await getTasks();
+            setTodos(response.data.tasks);
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
         }
     };
 
-    const handleDeleteTodo = (uuid: string) => {
-        setTodos(todos.filter((todo) => todo.uuid !== uuid));
-    }
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    const handleAddTodo = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (newTodo.trim()) {
+            try {
+                await createTask({
+                    title: newTodo,
+                    description: 'test'
+                });
+                setNewTodo('');
+                // Refresh the task list after creating a new task
+                await fetchTasks();
+            } catch (error) {
+                console.error('Error creating task:', error);
+            }
+        }
+    };
+
+    const handleDeleteTodo = async (uuid: string) => {
+        try {
+            await deleteTask(uuid);
+            // Refresh the task list after deleting a task
+            await fetchTasks();
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
+    };
 
     return (
         <Container maxWidth="sm">

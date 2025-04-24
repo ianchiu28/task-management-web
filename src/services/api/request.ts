@@ -1,6 +1,6 @@
 import { getToken } from '../auth';
 
-const API_BASE_URL = 'http://localhost:4010';
+const API_BASE_URL = 'http://localhost:3000';
 
 export interface ApiResponse<T> {
     message: string;
