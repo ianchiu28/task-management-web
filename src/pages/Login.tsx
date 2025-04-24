@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Alert, Box } from '@mui/material';
-import { login } from '../services/api';
+import { invokeLoginApi } from '../services/api/users';
 import { useAuth } from '../hooks/useAuth';
 import { FormContainer } from '../components/forms/FormContainer';
 import { EmailField } from '../components/forms/EmailField';
@@ -11,7 +11,7 @@ import { NavButton } from '../components/forms/NavButton';
 
 function Login() {
     const navigate = useNavigate();
-    const { login: authLogin } = useAuth();
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -25,9 +25,9 @@ function Login() {
         setIsLoading(true);
 
         try {
-            const response = await login(formData);
+            const response = await invokeLoginApi(formData);
             if (response.data.accessToken) {
-                authLogin(response.data.accessToken);
+                login(response.data.accessToken);
                 navigate('/todos', { replace: true });
             } else {
                 throw new Error('No token received');

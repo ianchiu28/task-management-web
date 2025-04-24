@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Alert } from '@mui/material';
-import { register } from '../services/api';
+import { invokeRegisterApi } from '../services/api/users';
 import { FormContainer } from '../components/forms/FormContainer';
 import { EmailField } from '../components/forms/EmailField';
 import { UsernameField } from '../components/forms/UsernameField';
@@ -75,7 +75,7 @@ function Register() {
             setIsLoading(true);
             try {
                 const { email, username, password } = formData;
-                await register({ email, username, password });
+                await invokeRegisterApi({ email, username, password });
                 navigate('/login');
             } catch (error) {
                 setApiError(error instanceof Error ? error.message : 'Registration failed');
