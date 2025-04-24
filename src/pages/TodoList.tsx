@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Container,
     Box,
@@ -12,15 +12,24 @@ import {
     Paper,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface Todo {
-    id: number;
-    text: string;
-}
+import { getTasks, Task } from '../services/api/task';
 
 function TodoList() {
-    const [todos, setTodos] = useState<Todo[]>([]);
+    const [todos, setTodos] = useState<Task[]>([]);
     const [newTodo, setNewTodo] = useState('');
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const response = await getTasks();
+                setTodos(response.data.tasks);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        };
+
+        fetchTasks();
+    }, []);
 
     const handleAddTodo = (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,14 +37,21 @@ function TodoList() {
         if (newTodo.trim()) {
             setTodos([
                 ...todos,
-                { id: Date.now(), text: newTodo },
+                { 
+                    uuid: Date.now().toString(),
+                    title: newTodo,
+                    description: '',
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
             ]);
             setNewTodo('');
         }
     };
 
-    const handleDeleteTodo = (id: number) => {
-        setTodos(todos.filter((todo) => todo.id !== id));
+    const handleDeleteTodo = (uuid: string) => {
+        setTodos(todos.filter((todo) => todo.uuid !== uuid));
     }
 
     return (
@@ -65,18 +81,18 @@ function TodoList() {
                     <List>
                         {todos.map((todo) => (
                             <ListItem 
-                                key={todo.id}
+                                key={todo.uuid}
                                 secondaryAction={
                                     <IconButton
                                         edge="end"
                                         aria-label="delete"
-                                        onClick={() => handleDeleteTodo(todo.id)}
+                                        onClick={() => handleDeleteTodo(todo.uuid)}
                                     >
                                         <DeleteIcon />
                                     </IconButton>
                                 }
                             >
-                                <ListItemText primary={todo.text} />
+                                <ListItemText primary={todo.title} />
                             </ListItem>
                         ))}
                     </List>

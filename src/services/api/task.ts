@@ -16,7 +16,7 @@ export const createTask = async (data: CreateTaskRequest): Promise<ApiResponse<C
     }, true);
 };
 
-interface Task {
+export interface Task {
     uuid: string;
     title: string;
     description: string;
