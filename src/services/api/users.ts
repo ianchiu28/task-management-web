@@ -6,8 +6,8 @@ interface RegisterRequest {
     password: string;
 }
 
-export const invokeRegisterApi = async (data: RegisterRequest): Promise<ApiResponse> => {
-    return fetchApi<ApiResponse>('/users', {
+export const invokeRegisterApi = async (data: RegisterRequest): Promise<ApiResponse<object>> => {
+    return fetchApi<ApiResponse<object>>('/users', {
         method: 'POST',
         body: JSON.stringify(data),
     });
