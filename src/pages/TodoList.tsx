@@ -7,7 +7,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction,
     IconButton,
     Typography,
     Paper,
@@ -42,44 +41,46 @@ function TodoList() {
     return (
         <Container maxWidth="sm">
             <Box sx={{ mt: 4 }}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h4" component="h1" gutterBottom>Todo List</Typography>
-                <Box component="form" onSubmit={handleAddTodo} sx={{ mb: 4 }}>
-                    <TextField
-                        fullWidth
-                        value={newTodo}
-                        onChange={(e) => setNewTodo(e.target.value)}
-                        placeholder="Add a new task"
-                        variant="outlined"
-                        sx={{ mr: 2 }}
-                    />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        sx={{ mt: 2 }}
-                    >
-                        Add
-                    </Button>
-                </Box>
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Typography variant="h4" component="h1" gutterBottom>Todo List</Typography>
+                    <Box component="form" onSubmit={handleAddTodo} sx={{ mb: 4 }}>
+                        <TextField
+                            fullWidth
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                            placeholder="Add a new task"
+                            variant="outlined"
+                            sx={{ mr: 2 }}
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            sx={{ mt: 2 }}
+                        >
+                            Add
+                        </Button>
+                    </Box>
 
-                <List>
-                    {todos.map((todo) => (
-                        <ListItem key={todo.id}>
-                        <ListItemText primary={todo.text} />
-                        <ListItemSecondaryAction>
-                            <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                onClick={() => handleDeleteTodo(todo.id)}
+                    <List>
+                        {todos.map((todo) => (
+                            <ListItem 
+                                key={todo.id}
+                                secondaryAction={
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="delete"
+                                        onClick={() => handleDeleteTodo(todo.id)}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                }
                             >
-                            <DeleteIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                        </ListItem>
-                    ))}
-                </List>
-            </Paper>
+                                <ListItemText primary={todo.text} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </Paper>
             </Box>
         </Container>
     );
